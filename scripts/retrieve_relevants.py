@@ -15,13 +15,8 @@ def _main():
         cfg = ConfigParser()
         cfg.read(CONF_INI)
         in_dir = cfg["PATHS"]["data_trans"]
-        os.system("chown -R daemon:daemon elasticsearch-8.5.3")
-        es_server = Popen(args=['elasticsearch-8.5.3/bin/elasticsearch'],
-                  stdout=PIPE, stderr=STDOUT, preexec_fn=lambda: os.setuid(1))
-        
-        #time.sleep(30)
-        #storage = DocumentStore(in_dir)
-        #storage.store_docs()
+        storage = DocumentStore(in_dir)
+        storage.store_docs()
         
 
     except Exception:  # pylint: disable=broad-except

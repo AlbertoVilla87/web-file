@@ -31,6 +31,10 @@ contourpy==1.0.6
 coverage==7.0.1
 cryptography==38.0.4
 cycler==0.11.0
+dash==2.7.1
+dash-core-components==2.0.0
+dash-html-components==2.0.0
+dash-table==5.0.0
 databricks-cli==0.17.4
 debugpy==1.6.4
 decorator==5.1.1
@@ -48,7 +52,7 @@ entrypoints==0.4
 executing==1.2.0
 faiss-cpu==1.7.3
 farm==0.8.0
-farm-haystack==1.4.0
+farm-haystack @ git+https://github.com/deepset-ai/haystack.git@594d2a10f84d13aef495c1cfbdaf4acad730c914
 fastapi==0.88.0
 filelock==3.8.2
 Flask==1.1.4
@@ -116,6 +120,7 @@ pexpect==4.8.0
 pickleshare==0.7.5
 Pillow==9.3.0
 platformdirs==2.6.0
+plotly==5.11.0
 pluggy==1.0.0
 posthog==2.2.0
 prometheus-client==0.15.0
@@ -175,9 +180,10 @@ stack-data==0.6.2
 starlette==0.22.0
 sympy==1.11.1
 tabulate==0.9.0
+tenacity==8.1.0
 threadpoolctl==3.1.0
 tika==1.24
-tokenizers==0.10.3
+tokenizers==0.13.2
 tomli==2.0.1
 torch==1.10.2
 torchvision==0.11.3
@@ -185,7 +191,7 @@ tornado==6.2
 tox==4.0.19
 tqdm==4.64.1
 traitlets==5.8.0
-transformers==4.13.0
+transformers==4.25.1
 typing_extensions==4.4.0
 ujson==5.4.0
 urllib3==1.26.13

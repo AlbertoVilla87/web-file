@@ -1,24 +1,23 @@
 import glob
 import os
 import pandas as pd
+from configparser import ConfigParser
 
 from scraper.twitter import Twitter
 
+from scripts import CONF_INI
+
 
 class DataManager:
-
-    ACCOUNTS = [
-        "NunezFeijoo",
-        "sanchezcastejon",
-        "Yolanda_Diaz_",
-        "Santi_ABASCAL",
-    ]
-    NAMES = [
-        "Feijo",
-        "Sanchez",
-        "Diaz",
-        "Abascal",
-    ]
+    def __init__(self):
+        """_summary_
+        :return: _description_
+        :rtype: _type_
+        """
+        cfg = ConfigParser()
+        cfg.read(CONF_INI)
+        self.names = cfg["PROFILES"]["names"]
+        self.accounts = cfg["PROFILES"]["accounts"]
 
     @staticmethod
     def read_profiles(dir: str) -> list:

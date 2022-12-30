@@ -8,24 +8,24 @@ from scraper.twitter import Twitter
 
 class DocumentStore:
 
-    TEXT = "text"
+    TEXT = "content"
     META = "meta"
     NAME = "name"
     DOC = "document"
 
-    def __init__(self, dir_docs: str):
+    def __init__(self, dir_docs: str, manager: DataManager):
         """_summary_
         :param dir_docs: _description_
         :type dir_docs: str
         """
         self.document_store = ElasticsearchDocumentStore(return_embedding=True)
         self.dir_docs = dir_docs
-        self.manager = DataManager()
+        self.manager = manager
 
     def store_docs(self):
         """_summary_"""
         profiles = self.manager.read_profiles(self.dir_docs)
-        for index, profile in tqdm(enumerate(profiles)):
+        for index, profile in enumerate(tqdm(profiles)):
             docs = [
                 {
                     DocumentStore.TEXT: row[Twitter.TWEET_EN],
@@ -48,7 +48,7 @@ class Retriever:
         :param store: _description_
         :type store: DocumentStore
         """
-        self.retriever = BM25Retriever(document_store=store)
+        self.retriever = BM25Retriever(document_store=store.document_store)
 
     def retrieve(self, query: str, top_k: int):
         """_summary_
@@ -57,5 +57,15 @@ class Retriever:
         :param top_k: _description_
         :type top_k: int
         """
-        docs = self.retriever(query=query, top_k=top_k)
-        return docs
+        docs = self.retriever.retrieve(query=query, top_k=top_k)
+        docs_parsed = []
+        for doc in docs:
+            data = doc.to_dict()
+            docs_parsed.append(
+                {
+                    Twitter.TWEET: data[DocumentStore.META][Twitter.TWEET],
+                    DocumentStore.NAME: data[DocumentStore.META][DocumentStore.NAME],
+                    Twitter.DATE: data[DocumentStore.META][Twitter.DATE],
+                }
+            )
+        return docs_parsed

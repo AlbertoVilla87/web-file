@@ -7,6 +7,7 @@ from configparser import ConfigParser
 
 from scripts import CONF_INI
 from scraper.twitter import Twitter
+from preparation.data_manager import DataManager
 
 
 def _main():
@@ -14,14 +15,12 @@ def _main():
         cfg = ConfigParser()
         cfg.read(CONF_INI)
         out_dir = cfg["PATHS"]["data"]
-        # user = "sanchezcastejon"
-        # user = "Santi_ABASCAL"
-        # user = "NunezFeijoo"
-        user = "Yolanda_Diaz_"
-        out_file = out_dir + user + ".csv"
-        profile = Twitter(user, out_file)
-        profile.get_tweets()
-        profile.save_profile()
+        manager = DataManager()
+        for user in manager.accounts:
+            out_file = out_dir + user + ".csv"
+            profile = Twitter(user, out_file)
+            profile.get_tweets()
+            profile.save_profile()
 
     except Exception:  # pylint: disable=broad-except
         logging.exception("Process failed")

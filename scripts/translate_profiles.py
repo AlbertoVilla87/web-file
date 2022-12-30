@@ -8,7 +8,6 @@ from configparser import ConfigParser
 from tqdm import tqdm
 
 from scripts import CONF_INI
-from processing.clean import Cleaning
 from scraper.twitter import Twitter
 from processing.translation import Translator
 from preparation.data_manager import DataManager
