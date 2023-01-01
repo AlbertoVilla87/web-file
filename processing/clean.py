@@ -14,6 +14,7 @@ class Cleaning:
     STOP = stopwords.words("spanish")
     BIGRAMS_ATTR = "bigrams"
     FREQUENCY_ATTR = "frequency"
+    YEAR = "year"
 
     @staticmethod
     def remove_line_breaks(content: str) -> str:
@@ -78,3 +79,46 @@ class Cleaning:
             Cleaning.FREQUENCY_ATTR,
         ]
         return bigram_freq
+    
+    @staticmethod
+    def add_year(dates: pd.Series) -> pd.Series:
+        """_summary_
+        :param dates: _description_
+        :type dates: pd.Series
+        :return: _description_
+        :rtype: 
+        """
+        dates = pd.to_datetime(dates)
+        years = dates.dt.year
+        return years
+    
+    @staticmethod
+    def compute_date(date: str) -> str:
+        """_summary_
+        :param date: _description_
+        :type date: str
+        :return: _description_
+        :rtype: str
+        """
+        date = pd.to_datetime(date)
+        date = str(date.date())
+        return date
+    
+    @staticmethod
+    def compute_period(start_year: str, end_year: str) -> list:
+        """_summary_
+        :param start_year: _description_
+        :type start_year: str
+        :param end_year: _description_
+        :type end_year: str
+        :return: _description_
+        :rtype: list
+        """
+        start_year, end_year = int(start_year), int(end_year)
+        start = min([start_year, end_year])
+        end = max([start_year, end_year])
+        period = list(range(start, end))
+        return period
+
+
+

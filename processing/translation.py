@@ -7,7 +7,7 @@ from deep_translator import GoogleTranslator
 class Translator:
     @staticmethod
     def translate_sp_en(contents: pd.Series) -> list:
-        """_summary_
+        """Spanish to English
         :param contents: _description_
         :type contents: pd.Series
         :return: _description_
@@ -17,3 +17,13 @@ class Translator:
         for content in tqdm(contents):
             trans.append(GoogleTranslator(source="es", target="en").translate(content))
         return trans
+
+    def translate_sp_en_query(query: str) -> str:
+        """Spanish to English
+        :param query: _description_
+        :type query: str
+        :return: _description_
+        :rtype: str
+        """
+        return GoogleTranslator(source="es", target="en").translate(query)
+        

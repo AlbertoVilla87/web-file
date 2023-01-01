@@ -1,6 +1,7 @@
 import glob
 import os
 import pandas as pd
+import ast
 from configparser import ConfigParser
 
 from scraper.twitter import Twitter
@@ -16,8 +17,8 @@ class DataManager:
         """
         cfg = ConfigParser()
         cfg.read(CONF_INI)
-        self.names = cfg["PROFILES"]["names"]
-        self.accounts = cfg["PROFILES"]["accounts"]
+        self.names = ast.literal_eval(cfg["PROFILES"]["names"])
+        self.accounts = ast.literal_eval(cfg["PROFILES"]["accounts"])
 
     @staticmethod
     def read_profiles(dir: str) -> list:
@@ -29,6 +30,7 @@ class DataManager:
         """
         profiles = []
         files = DataManager.list_csv_files(dir)
+        print(files)
         for file in files:
             profiles.append(pd.read_csv(file, sep=";"))
         return profiles
