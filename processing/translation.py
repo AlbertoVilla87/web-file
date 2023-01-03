@@ -18,6 +18,7 @@ class Translator:
             trans.append(GoogleTranslator(source="es", target="en").translate(content))
         return trans
 
+    @staticmethod
     def translate_sp_en_query(query: str) -> str:
         """Spanish to English
         :param query: _description_
@@ -26,4 +27,13 @@ class Translator:
         :rtype: str
         """
         return GoogleTranslator(source="es", target="en").translate(query)
-        
+
+    @staticmethod
+    def translate_en_sp_query(query: str) -> str:
+        """English to Spanish
+        :param query: _description_
+        :type query: str
+        :return: _description_
+        :rtype: str
+        """
+        return GoogleTranslator(source="en", target="es").translate(query)

@@ -1,3 +1,4 @@
+psutil
 alembic==1.4.1
 aniso8601==9.0.1
 anyio==3.6.2
@@ -12,7 +13,6 @@ azure-storage-blob==12.11.0
 backcall==0.2.0
 backoff==1.11.1
 beautifulsoup4==4.11.1
-black==22.12.0
 boto3==1.26.38
 botocore==1.29.38
 cachetools==5.2.0
@@ -20,7 +20,7 @@ certifi==2022.12.7
 cffi==1.15.1
 chardet==5.1.0
 charset-normalizer==2.1.1
-click==7.1.2
+click==7.0
 cloudpickle==2.2.0
 colorama==0.4.6
 coloredlogs==15.0.1
@@ -43,7 +43,7 @@ dill==0.3.6
 distlib==0.3.6
 docker==6.0.1
 docopt==0.6.2
-dotmap==1.3.30
+dotmap
 elastic-apm==6.13.2
 elastic-transport==8.4.0
 elasticsearch==7.10.0
@@ -51,7 +51,7 @@ emoji==2.2.0
 entrypoints==0.4
 executing==1.2.0
 faiss-cpu==1.7.3
-farm==0.8.0
+farm
 farm-haystack @ git+https://github.com/deepset-ai/haystack.git@594d2a10f84d13aef495c1cfbdaf4acad730c914
 fastapi==0.88.0
 filelock==3.8.2
@@ -89,13 +89,13 @@ jupyter_client==7.4.8
 jupyter_core==5.1.0
 kiwisolver==1.4.4
 langdetect==1.0.9
-llvmlite==0.39.1
+llvmlite
 lxml==4.9.2
 Mako==1.2.4
-MarkupSafe==2.1.1
+MarkupSafe==2.0.1
 matplotlib==3.6.2
 matplotlib-inline==0.1.6
-mlflow==1.13.1
+mlflow
 mmh3==3.0.0
 monotonic==1.6
 more-itertools==9.0.0
@@ -127,7 +127,6 @@ prometheus-client==0.15.0
 prometheus-flask-exporter==0.21.0
 prompt-toolkit==3.0.36
 protobuf==3.20.3
-psutil==5.9.4
 psycopg2-binary==2.9.5
 ptyprocess==0.7.0
 pure-eval==0.2.2
@@ -185,13 +184,13 @@ threadpoolctl==3.1.0
 tika==1.24
 tokenizers==0.13.2
 tomli==2.0.1
-torch==1.10.2
+torch
 torchvision==0.11.3
 tornado==6.2
 tox==4.0.19
 tqdm==4.64.1
 traitlets==5.8.0
-transformers==4.25.1
+transformers
 typing_extensions==4.4.0
 ujson==5.4.0
 urllib3==1.26.13
@@ -203,6 +202,5 @@ wcwidth==0.2.5
 weaviate-client==3.10.0
 websocket-client==1.4.2
 Werkzeug==0.16.1
-wordcloud==1.8.2.2
 wrapt==1.14.1
 zipp==3.11.0

@@ -1,15 +1,22 @@
+import time
 from dash import html, dcc, Dash
 from dash.dependencies import Input, State, Output
 
-from modeling.haystack import DocumentStore, Retriever
+from modeling.haystack import DocumentStore, Reader
 from scraper.twitter import Twitter
 from processing.translation import Translator
 
 from preparation.data_manager import DataManager
 
+from haystack.utils import launch_es
+
+launch_es()
+time.sleep(50)
+
+model_path = "minilm-uncased-squad2"
 manager = DataManager()
 document_store = DocumentStore("", manager)
-retriever = Retriever(document_store)
+reader = Reader(model_path, document_store)
 
 
 def create_output(doc):
@@ -21,10 +28,25 @@ def create_output(doc):
     """
     out = html.Div(
         [
-            html.H3(doc[DocumentStore.NAME]),
+            html.Span(
+                html.H4(
+                    [
+                        doc[Reader.ANSWER_TAG],
+                        html.Div(
+                            doc[DocumentStore.NAME],
+                            style={
+                                "float": "right",
+                                "color": "#9aa0a6",
+                                "font-style": "italic",
+                                "font-weight": "normal",
+                            },
+                        ),
+                    ]
+                ),
+            ),
             html.Span(
                 [
-                    html.Span(doc[Twitter.DATE], style={"color": "#9aa0a6"}),
+                    html.Span(doc[Twitter.DATE] + " - ", style={"color": "#9aa0a6"}),
                     html.Span(doc[Twitter.TWEET]),
                 ]
             ),
@@ -43,7 +65,7 @@ app = Dash(__name__)
 app.layout = html.Div(
     [
         html.H1(
-            children="Pregunta a la hemeroteca",
+            children="Conoce a los políticos",
             style={"textAlign": "center", "font-family": "Open Sans, sans-serif"},
         ),
         html.Div(
@@ -113,7 +135,7 @@ app.layout = html.Div(
             dcc.Input(
                 id="query",
                 type="text",
-                placeholder="",
+                placeholder="Haz una pregunta o consulta",
                 className="input",
                 style={
                     "margin-left": "37%",
@@ -156,9 +178,9 @@ def update_news(value, n_clicks, candidates, start_year, end_year):
 
     if n_clicks > 0:
         query = Translator.translate_sp_en_query(value)
-        docs = retriever.retrieve(
+        docs = reader.read(
             query,
-            top_k=10,
+            top_k_retr=10,
             candidates=candidates,
             start_year=start_year,
             end_year=end_year,

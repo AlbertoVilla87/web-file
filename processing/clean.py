@@ -5,6 +5,8 @@ import pandas as pd
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
+nltk.download("stopwords")
+
 
 class Cleaning:
 
@@ -79,19 +81,19 @@ class Cleaning:
             Cleaning.FREQUENCY_ATTR,
         ]
         return bigram_freq
-    
+
     @staticmethod
     def add_year(dates: pd.Series) -> pd.Series:
         """_summary_
         :param dates: _description_
         :type dates: pd.Series
         :return: _description_
-        :rtype: 
+        :rtype:
         """
         dates = pd.to_datetime(dates)
         years = dates.dt.year
         return years
-    
+
     @staticmethod
     def compute_date(date: str) -> str:
         """_summary_
@@ -103,7 +105,7 @@ class Cleaning:
         date = pd.to_datetime(date)
         date = str(date.date())
         return date
-    
+
     @staticmethod
     def compute_period(start_year: str, end_year: str) -> list:
         """_summary_
@@ -117,8 +119,5 @@ class Cleaning:
         start_year, end_year = int(start_year), int(end_year)
         start = min([start_year, end_year])
         end = max([start_year, end_year])
-        period = list(range(start, end))
+        period = list(range(start, end + 1))
         return period
-
-
-
