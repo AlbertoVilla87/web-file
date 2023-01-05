@@ -8,10 +8,6 @@ from processing.translation import Translator
 
 from preparation.data_manager import DataManager
 
-from haystack.utils import launch_es
-
-launch_es()
-time.sleep(50)
 
 model_path = "minilm-uncased-squad2"
 manager = DataManager()
@@ -102,8 +98,8 @@ app.layout = html.Div(
                         {"label": "2021", "value": "2021"},
                         {"label": "2022", "value": "2022"},
                     ],
-                    placeholder="2009",
-                    value="2009",
+                    placeholder="2022",
+                    value="2022",
                     style={"width": "100px"},
                 ),
                 dcc.Dropdown(
@@ -180,7 +176,7 @@ def update_news(value, n_clicks, candidates, start_year, end_year):
         query = Translator.translate_sp_en_query(value)
         docs = reader.read(
             query,
-            top_k_retr=10,
+            top_k_retr=5,
             candidates=candidates,
             start_year=start_year,
             end_year=end_year,
@@ -194,4 +190,4 @@ def update_news(value, n_clicks, candidates, start_year, end_year):
 
 
 if __name__ == "__main__":
-    app.run_server()
+    app.run_server(host="0.0.0.0", debug=True)

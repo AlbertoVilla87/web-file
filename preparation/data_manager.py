@@ -30,7 +30,6 @@ class DataManager:
         """
         profiles = []
         files = DataManager.list_csv_files(dir)
-        print(files)
         for file in files:
             profiles.append(pd.read_csv(file, sep=";"))
         return profiles

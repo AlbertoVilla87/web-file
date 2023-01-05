@@ -1,6 +1,8 @@
 # web-file
 
-Web-file scrapes information from Twitter public accounts and allows the user to ask and be answered from the profiles extracted. 
+Web-file scrapes information from internet and allows the user to ask and be answered from the profiles extracted. 
+
+
 
 ## Installing
 
@@ -67,5 +69,6 @@ brew install rust
 # haystack installation
 GRPC_PYTHON_BUILD_SYSTEM_ZLIB=true pip install git+https://github.com/deepset-ai/haystack.git
 ```
-## Pregunta a los Candidatos (Demo)
+## Demo
 
+![gif](askcandidates.gif)
