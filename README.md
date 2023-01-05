@@ -1,6 +1,6 @@
 # web-file
 
-Web-file scrapes information from internet and allows the user to ask and be answered from the profiles extracted. 
+Web-file scrapes information from internet and allows the user to ask and be answered from the data extracted. 
 
 
 
@@ -72,6 +72,7 @@ GRPC_PYTHON_BUILD_SYSTEM_ZLIB=true pip install git+https://github.com/deepset-ai
 ## Demo
 
 ```sh
+docker build -t askcand:v1 .
 docker-compose up -d es 
 docker-compose run webfile python -m scripts.store_docs_to_elastic
 docker-compose up -d
