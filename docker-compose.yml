@@ -30,6 +30,10 @@ services:
       - es
     networks:
       - dash-network
+    environment:
+      - "discovery.zen.ping.unicast.hosts=elasticsearch"
+      - ELASTICSEARCH_URL=http://elasticsearch:9200"
+      - ELASTICSEARCH_HOST=elasticsearch
 
 networks:
   dash-network:

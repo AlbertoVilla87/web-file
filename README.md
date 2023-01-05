@@ -71,4 +71,10 @@ GRPC_PYTHON_BUILD_SYSTEM_ZLIB=true pip install git+https://github.com/deepset-ai
 ```
 ## Demo
 
+```sh
+docker-compose up -d es 
+docker-compose run webfile python -m scripts.store_docs_to_elastic
+docker-compose up -d
+```
+
 ![gif](askcandidates.gif)
