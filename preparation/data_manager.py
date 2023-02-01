@@ -1,5 +1,6 @@
 import glob
 import os
+import json
 import pandas as pd
 import ast
 from configparser import ConfigParser
@@ -19,6 +20,7 @@ class DataManager:
         cfg.read(CONF_INI)
         self.names = ast.literal_eval(cfg["PROFILES"]["names"])
         self.accounts = ast.literal_eval(cfg["PROFILES"]["accounts"])
+        self.trans_names = ast.literal_eval(cfg["TRANSCRIPTS"]["politics"])
 
     @staticmethod
     def read_profiles(dir: str) -> list:
@@ -33,6 +35,20 @@ class DataManager:
         for file in files:
             profiles.append(pd.read_csv(file, sep=";"))
         return profiles
+
+    @staticmethod
+    def read_transcripts_urls(dir: str) -> list:
+        """_summary_
+        :param dir: _description_
+        :type dir: str
+        :return: _description_
+        :rtype: _type_
+        """
+        transcripts = []
+        files = DataManager.list_json_files(dir)
+        for file in files:
+            transcripts.append(DataManager.read_json_file(file))
+        return transcripts
 
     @staticmethod
     def collect_keyword(profiles: list, keyword: str):
@@ -87,6 +103,19 @@ class DataManager:
         return files
 
     @staticmethod
+    def list_json_files(dir: str) -> list:
+        """_summary_
+        :param dir: _description_
+        :type dir: str
+        :return: _description_
+        :rtype: list
+        """
+        files = []
+        for file in glob.glob(dir + "*.json"):
+            files.append(file)
+        return files
+
+    @staticmethod
     def get_filename(filename: str) -> str:
         """_summary_
         :param filename: _description_
@@ -94,3 +123,20 @@ class DataManager:
         """
         base = os.path.basename(filename)
         return base
+
+    @staticmethod
+    def read_json_file(file):
+        with open(file, encoding="utf-8") as json_file:
+            json_file = json.load(json_file)
+        return json_file
+
+    @staticmethod
+    def write_json(file: str, data: dict):
+        """_summary_
+        :param file: _description_
+        :type file: str
+        :param data: _description_
+        :type data: dict
+        """
+        with open(file, "w", encoding="utf-8") as outfile:
+            json.dump(data, outfile, indent=4, ensure_ascii=False)

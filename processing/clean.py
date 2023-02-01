@@ -2,10 +2,10 @@ import re
 import nltk
 import emoji
 import pandas as pd
+import unicodedata
+from string import printable
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-
-nltk.download("stopwords")
 
 
 class Cleaning:
@@ -27,6 +27,17 @@ class Cleaning:
         :rtype: str
         """
         content = " ".join(content.split())
+        return content
+
+    @staticmethod
+    def remove_hidden_characters(content: str) -> str:
+        """_summary_
+        :param content: _description_
+        :type content: str
+        :return: _description_
+        :rtype: str
+        """
+        content = "".join(char for char in content if char in printable)
         return content
 
     @staticmethod
@@ -121,3 +132,18 @@ class Cleaning:
         end = max([start_year, end_year])
         period = list(range(start, end + 1))
         return period
+
+    @staticmethod
+    def create_name_file(name: str):
+        """_summary_
+        :param name: _description_
+        :type name: str
+        """
+        name = (
+            unicodedata.normalize("NFKD", name)
+            .encode("ascii", "ignore")
+            .decode("ascii")
+        )
+        name = name.lower()
+        name = name.replace(" ", "").replace(",", "").replace("-", "_")
+        return name

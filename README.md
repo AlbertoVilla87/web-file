@@ -78,4 +78,4 @@ docker-compose run webfile python -m scripts.store_docs_to_elastic
 docker-compose up -d
 ```
 
-![gif](askcandidates.gif)
+![gif](demo.gif)

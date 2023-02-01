@@ -7,6 +7,7 @@ from haystack.pipelines import ExtractiveQAPipeline
 
 from preparation.data_manager import DataManager
 from scraper.twitter import Twitter
+from processing.transcripts import Transcripts
 from processing.clean import Cleaning
 from processing.translation import Translator
 
@@ -27,14 +28,72 @@ class DocumentStore:
         :param dir_docs: _description_
         :type dir_docs: str
         """
-        self.document_store = ElasticsearchDocumentStore(
-            host="es", return_embedding=True
-        )
+        self.document_store = ElasticsearchDocumentStore(return_embedding=True)
         self.dir_docs = dir_docs
         self.manager = manager
 
-    def store_docs(self):
-        """_summary_"""
+    def store_transcripts(self, transcript: dict):
+        """_summary_
+        :param transcript: _description_
+        :type transcript: dict
+        """
+        docs = []
+        for name in transcript.keys():
+            for intervention in transcript[name]:
+                docs.append(
+                    {
+                        DocumentStore.TEXT: intervention[Transcripts.TEXT],
+                        DocumentStore.META: {
+                            Transcripts.TITLE: intervention[Transcripts.META][
+                                Transcripts.TITLE
+                            ],
+                            Transcripts.SUBJECT: intervention[Transcripts.META][
+                                Transcripts.SUBJECT
+                            ],
+                            Transcripts.AUTHOR: intervention[Transcripts.META][
+                                Transcripts.AUTHOR
+                            ],
+                            Transcripts.PAGE: intervention[Transcripts.META][
+                                Transcripts.PAGE
+                            ],
+                            Transcripts.TEXT_ES: intervention[Transcripts.META][
+                                Transcripts.TEXT_ES
+                            ],
+                            Transcripts.URL: intervention[Transcripts.META][
+                                Transcripts.URL
+                            ],
+                            DocumentStore.NAME: name,
+                        },
+                    }
+                )
+        self.document_store.write_documents(docs, index=DocumentStore.DOC)
+
+    def store_tweets(self):
+        """
+        Store tweets
+        """
+        profiles = self.manager.read_profiles(self.dir_docs)
+        for index, profile in enumerate(tqdm(profiles)):
+            docs = [
+                {
+                    DocumentStore.TEXT: row[Twitter.TWEET_EN],
+                    DocumentStore.META: {
+                        Twitter.DATE: row[Twitter.DATE],
+                        Cleaning.YEAR: row[Cleaning.YEAR],
+                        Twitter.TWEET: row[Twitter.TWEET],
+                        DocumentStore.NAME: self.manager.names[index],
+                    },
+                }
+                for _, row in profile.drop_duplicates(
+                    subset=Twitter.TWEET_EN
+                ).iterrows()
+            ]
+            self.document_store.write_documents(docs, index=DocumentStore.DOC)
+
+    def store_tweets(self):
+        """
+        Store tweets
+        """
         profiles = self.manager.read_profiles(self.dir_docs)
         for index, profile in enumerate(tqdm(profiles)):
             docs = [
@@ -113,6 +172,14 @@ class Reader:
     QUERY_TAG = "query"
     CONTEXT_TAG = "context"
 
+    NO_INFO = {
+        ANSWER_TAG: "",
+        Transcripts.TEXT: "",
+        DocumentStore.NAME: "",
+        Transcripts.TITLE: "",
+        Transcripts.URL: "",
+    }
+
     def __init__(self, model_path: str, store: DocumentStore):
         """_summary_
         :param model_path: _description_
@@ -178,4 +245,59 @@ class Reader:
                     Twitter.DATE: date,
                 }
             )
+        return docs
+
+    def read_transcript(
+        self,
+        query: str,
+        top_k_retr: int,
+        politic: str,
+        date: str,
+    ):
+        """_summary_
+        :param query: _description_
+        :type query: str
+        :param top_k_retr: _description_
+        :type top_k_retr: int
+        :param politic: _description_
+        :type politic: str
+        :param date: _description_
+        :type date: str
+        """
+        docs = []
+        filters = {DocumentStore.NAME: [politic]}
+        params = {
+            Retriever.RET_TAG: {
+                Retriever.TOP_K_TAG: top_k_retr,
+                Retriever.FILT_TAG: filters,
+            },
+            Reader.READ_TAG: {Reader.TOP_K_TAG: top_k_retr},
+        }
+        answers = self.pipe.run(query=query, params=params)
+        if len(answers[Reader.ANSWERS_TAG]) > 0:
+            for idx in range(len(answers[Reader.ANSWERS_TAG])):
+                answer = Translator.translate_en_sp_query(
+                    answers[Reader.ANSWERS_TAG][idx].answer
+                )
+                docs.append(
+                    {
+                        Reader.ANSWER_TAG: answer,
+                        Transcripts.TEXT: answers[Reader.ANSWERS_TAG][idx].meta[
+                            Transcripts.TEXT_ES
+                        ],
+                        DocumentStore.NAME: answers[Reader.ANSWERS_TAG][idx].meta[
+                            DocumentStore.NAME
+                        ],
+                        Transcripts.SUBJECT: answers[Reader.ANSWERS_TAG][idx].meta[
+                            Transcripts.SUBJECT
+                        ],
+                        Transcripts.URL: answers[Reader.ANSWERS_TAG][idx].meta[
+                            Transcripts.URL
+                        ]
+                        + "#page="
+                        + str(answers[Reader.ANSWERS_TAG][idx].meta[Transcripts.PAGE]),
+                    }
+                )
+        else:
+            docs.append(Reader.NO_INFO)
         return docs
