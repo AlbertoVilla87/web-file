@@ -21,7 +21,7 @@ def _main():
         in_dir = cfg["TRANSCRIPTS"]["dir_raw"]
         out_dir = cfg["TRANSCRIPTS"]["dir_processed"]
         manager = DataManager()
-        transcript = manager.read_json_file(in_dir + "garciaegeateodoro.json")
+        transcript = manager.read_json_file(in_dir + "sanchezperez_castejonpedro.json")
         transcriptor = Transcripts(transcript)
         transcriptor.read_write_interventions()
         out_file = out_dir + Cleaning.create_name_file(transcriptor.name) + ".json"

@@ -26,6 +26,7 @@ class Transcripts(Politics):
     META = "meta"
     TEXT = "content"
     TEXT_ES = "content_es"
+    YEAR = "year"
 
     def __init__(self, transcript: dict):
         """_summary_
@@ -48,6 +49,7 @@ class Transcripts(Politics):
         """
         interconts = []
         urls = data[Transcripts.TRANS].unique()
+        index = 0
         for url in tqdm(urls):
             pages = data.loc[data[Transcripts.TRANS] == url, Transcripts.PAGE].values
             reader = self._request_reader_pdf(url)
@@ -64,6 +66,7 @@ class Transcripts(Politics):
                             Transcripts.META: {
                                 Transcripts.TITLE: title,
                                 Transcripts.SUBJECT: subject,
+                                Transcripts.YEAR: Cleaning.extrat_year(subject),
                                 Transcripts.AUTHOR: author,
                                 Transcripts.URL: url,
                                 Transcripts.PAGE: int(page),

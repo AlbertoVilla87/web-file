@@ -37,7 +37,7 @@ class Cleaning:
         :return: _description_
         :rtype: str
         """
-        content = "".join(char for char in content if char in printable)
+        content = " ".join(word_tokenize(content))
         return content
 
     @staticmethod
@@ -147,3 +147,15 @@ class Cleaning:
         name = name.lower()
         name = name.replace(" ", "").replace(",", "").replace("-", "_")
         return name
+
+    @staticmethod
+    def extrat_year(text: str):
+        """_summary_
+        :param text: _description_
+        :type text: str
+        """
+        years = re.findall(r"2\d{3}", text, flags=re.IGNORECASE)
+        if len(years) > 0:
+            return years[0]
+        else:
+            return ""

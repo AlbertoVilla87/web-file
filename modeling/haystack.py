@@ -176,7 +176,7 @@ class Reader:
         ANSWER_TAG: "",
         Transcripts.TEXT: "",
         DocumentStore.NAME: "",
-        Transcripts.TITLE: "",
+        Transcripts.SUBJECT: "",
         Transcripts.URL: "",
     }
 

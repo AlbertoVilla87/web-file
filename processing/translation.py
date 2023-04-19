@@ -1,5 +1,5 @@
-from typing import Union
 import pandas as pd
+from typing import Union
 from tqdm import tqdm
 
 from deep_translator import GoogleTranslator
@@ -15,8 +15,14 @@ class Translator:
         :rtype: list
         """
         trans = []
-        for content in contents:
-            trans.append(GoogleTranslator(source="es", target="en").translate(content))
+        for content in tqdm(contents):
+            try:
+                trans.append(
+                    GoogleTranslator(source="es", target="en").translate(content)
+                )
+            except:
+                trans.append("")
+                pass
         return trans
 
     @staticmethod
@@ -37,4 +43,7 @@ class Translator:
         :return: _description_
         :rtype: str
         """
-        return GoogleTranslator(source="en", target="es").translate(query)
+        try:
+            return GoogleTranslator(target="es").translate(query)
+        except:
+            return query

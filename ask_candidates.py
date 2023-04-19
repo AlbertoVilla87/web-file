@@ -28,15 +28,6 @@ def create_output(doc):
                 html.H4(
                     [
                         html.A(doc[Reader.ANSWER_TAG], href=doc[Transcripts.URL]),
-                        html.Div(
-                            doc[DocumentStore.NAME],
-                            style={
-                                "float": "right",
-                                "color": "#9aa0a6",
-                                "font-style": "italic",
-                                "font-weight": "normal",
-                            },
-                        ),
                     ]
                 ),
             ),
@@ -93,7 +84,7 @@ app.layout = html.Div(
                     ],
                     placeholder="Sánchez Pérez-Castejón, Pedro",
                     value="Sánchez Pérez-Castejón, Pedro",
-                    style={"width": "70%"},
+                    style={"width": "45%"},
                 ),
                 dcc.Dropdown(
                     id="date",
@@ -105,10 +96,10 @@ app.layout = html.Div(
                     ],
                     placeholder="2022",
                     value="2022",
-                    style={"width": "40%", "margin-right": "38%"},
+                    style={"width": "40%", "padding-left": "7%"},
                 ),
             ],
-            style={"margin-left": "35%", "display": "flex"},
+            style={"margin-left": "25%", "display": "flex"},
         ),
         html.Div(
             dcc.Input(
@@ -118,8 +109,8 @@ app.layout = html.Div(
                 placeholder="Haz una pregunta o consulta (e.g. quién debe pagar más)",
                 className="input",
                 style={
-                    "margin-left": "35%",
-                    "width": "450px",
+                    "margin-left": "25%",
+                    "width": "50%",
                     "height": "20px",
                     "padding": "10px",
                     "margin-top": "10px",

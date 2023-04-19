@@ -41,6 +41,9 @@ class Politics:
         ],
         "Abascal Conde, Santiago": [
             re.compile(r"(\bEl señor\b)( ABASCAL CONDE\s*)(\(.*\))?:"),
+            re.compile(
+                r"(\bEl señor\b)( CANDIDATO A LA PRESIDENCIA DEL GOBIERNO \(Abascal Conde\)\s*)(\(.*\))?:"
+            ),
         ],
     }
 
