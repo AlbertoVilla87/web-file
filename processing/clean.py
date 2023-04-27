@@ -7,7 +7,6 @@ from string import printable
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
-
 class Cleaning:
 
     SIGN = "@[A-Za-z0-9]+"

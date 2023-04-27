@@ -17,9 +17,10 @@ COPY . .
 
 # Install pip requirements
 COPY requirements.txt .
-RUN python -m pip install --upgrade pip
-RUN python -m pip install -r requirements.txt
-RUN python -m nltk.downloader stopwords
+RUN pip3 install -r requirements.txt 
+RUN [ "python3", "-c", "import nltk; nltk.download('stopwords')" ]
+RUN [ "python3", "-c", "import nltk; nltk.download('punkt')" ]
+RUN cp -r /root/nltk_data /usr/local/share/nltk_data 
 
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
 # For more info, please refer to https://aka.ms/vscode-docker-python-configure-containers

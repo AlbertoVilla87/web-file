@@ -72,10 +72,12 @@ GRPC_PYTHON_BUILD_SYSTEM_ZLIB=true pip install git+https://github.com/deepset-ai
 ## Demo
 
 ```sh
-docker build -t askcand:v1 .
-docker-compose up -d es 
-docker-compose run webfile python -m scripts.store_docs_to_elastic
+docker-compose up
+docker-compose run webfile python -m scripts.store_transcripts_to_elastic
 docker-compose up -d
 ```
+
+https://learn.microsoft.com/es-es/azure/container-instances/tutorial-docker-compose
+https://docs.docker.com/cloud/aci-integration/
 
 ![gif](demo.gif)

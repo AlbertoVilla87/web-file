@@ -1,6 +1,22 @@
 version: '3.4'
 
 services:
+
+  haystack-api:
+    # Pull Haystack's latest commit
+    image: "deepset/haystack:cpu-main"
+    ports:
+      - 8000:8000
+    restart: on-failure
+    environment:
+      # See rest_api/pipeline/pipelines.haystack-pipeline.yml for configurations of Search & Indexing Pipeline.
+      - DOCUMENTSTORE_PARAMS_HOST=elasticsearch
+      - PIPELINE_YAML_PATH=/opt/venv/lib/python3.10/site-packages/rest_api/pipeline/pipelines.haystack-pipeline.yml
+      - QUERY_PIPELINE_NAME=query
+      - TOKENIZERS_PARALLELISM=false
+    depends_on:
+      es:
+        condition: service_healthy
   es:
     image: "docker.elastic.co/elasticsearch/elasticsearch:7.9.2"
     ports:
