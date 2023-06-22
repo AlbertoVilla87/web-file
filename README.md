@@ -73,6 +73,7 @@ GRPC_PYTHON_BUILD_SYSTEM_ZLIB=true pip install git+https://github.com/deepset-ai
 
 ```sh
 docker-compose up
+docker start elasticsearch > /dev/null 2>&1 || docker run -d -p 9200:9200 -e "discovery.type=single-node" --name elasticsearch elasticsearch:7.17.6
 docker-compose run webfile python -m scripts.store_transcripts_to_elastic
 docker-compose up -d
 ```

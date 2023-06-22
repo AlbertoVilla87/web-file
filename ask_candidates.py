@@ -8,7 +8,6 @@ from processing.translation import Translator
 
 from preparation.data_manager import DataManager
 
-
 model_path = "minilm-uncased-squad2"
 manager = DataManager()
 document_store = DocumentStore("", manager)

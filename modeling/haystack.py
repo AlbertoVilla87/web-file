@@ -28,7 +28,9 @@ class DocumentStore:
         :param dir_docs: _description_
         :type dir_docs: str
         """
-        self.document_store = ElasticsearchDocumentStore(host="localhost", return_embedding=True)
+        self.document_store = ElasticsearchDocumentStore(
+            host="0.0.0.0", return_embedding=True
+        )
         self.dir_docs = dir_docs
         self.manager = manager
 

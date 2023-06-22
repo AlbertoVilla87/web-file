@@ -1,56 +1,29 @@
-version: '3.4'
-
+version: "1"
 services:
 
-  haystack-api:
-    # Pull Haystack's latest commit
-    image: "deepset/haystack:cpu-main"
-    ports:
-      - 8000:8000
-    restart: on-failure
+  elasticsearch:
+    image: elasticsearch:7.17.6
     environment:
-      # See rest_api/pipeline/pipelines.haystack-pipeline.yml for configurations of Search & Indexing Pipeline.
-      - DOCUMENTSTORE_PARAMS_HOST=elasticsearch
-      - PIPELINE_YAML_PATH=/opt/venv/lib/python3.10/site-packages/rest_api/pipeline/pipelines.haystack-pipeline.yml
-      - QUERY_PIPELINE_NAME=query
-      - TOKENIZERS_PARALLELISM=false
-    depends_on:
-      es:
-        condition: service_healthy
-  es:
-    image: "docker.elastic.co/elasticsearch/elasticsearch:7.9.2"
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Des.network.host=0.0.0.0
+      - network.host=0.0.0.0
     ports:
       - 9200:9200
-    environment:
-      - node.name=es
-      - cluster.name=es-docker-cluster
-      - cluster.initial_master_nodes=es
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    networks:
-      - dash-network
-  webfile:
-    image: askcand:v1
+      - 9300:9300
+    restart: unless-stopped
+    healthcheck:
+      test: curl --fail http://localhost:9200/_cat/health || exit 1
+      interval: 10s
+      timeout: 1s
+      retries: 10
+    network_mode: host
+
+  webapp:
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: Dockerfile
     ports:
-      - "8050:8050"
-    expose:
-      - "8050"
+      - 8050:8050
     depends_on:
-      - es
-    networks:
-      - dash-network
-    environment:
-      - "discovery.zen.ping.unicast.hosts=elasticsearch"
-      - ELASTICSEARCH_URL=http://elasticsearch:9200"
-      - ELASTICSEARCH_HOST=elasticsearch
-
-networks:
-  dash-network:
-    driver: bridge
+      - elasticsearch
+    network_mode: host
